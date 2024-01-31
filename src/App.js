@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import Auth from './components/Auth/Auth';
-import Home from './components/Home/Home';
+import Profile from './components/Profile/Profile';
 
 function App() {
   return (
@@ -14,8 +14,8 @@ function App() {
           <Route path='/auth'>
             <Auth/>
           </Route>
-          <Route path='/home'>
-            <Home/>
+          <Route path='/profile'>
+            <Profile/>
           </Route>
         </Switch>
       </div>

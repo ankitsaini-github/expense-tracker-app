@@ -49,7 +49,7 @@ const Auth = () => {
           localStorage.setItem('usertoken',data.idToken)
           console.log('login success ',data)
           window.alert('login success ')
-          history.replace('/home')
+          history.replace('/profile')
         }
       }
       else{
