@@ -4,6 +4,7 @@ import Auth from './components/Auth/Auth';
 import Profile from './components/Profile/Profile';
 
 function App() {
+  const token=window.localStorage.getItem('usertoken')
   return (
     <BrowserRouter>
       <div className="App">
@@ -15,7 +16,10 @@ function App() {
             <Auth/>
           </Route>
           <Route path='/profile'>
-            <Profile/>
+            {token ? <Profile/> : <Redirect to="/auth"/>}
+          </Route>
+          <Route path='*' exact>
+            <p>404 ERROR : PAGE NOT FOUND</p>
           </Route>
         </Switch>
       </div>

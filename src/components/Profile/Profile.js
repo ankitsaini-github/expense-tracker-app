@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Form, Row, Col, Image } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 const Profile = () => {
   const [updateform, setupdateform] = useState(false);
+  const history=useHistory()
   const [userdata, setuserdata] = useState({
     displayname: "",
     email: "",
@@ -111,17 +113,28 @@ const Profile = () => {
     }
   };
 
+  const logouthandler=()=>{
+    if(window.confirm('Want to Log Out ?'))
+    {
+      window.localStorage.removeItem('usertoken')
+      history.replace('/auth')
+    }
+  }
+
   return (
     <div className="w-100 d-flex flex-column align-items-center">
       <div className="border p-3 d-flex justify-content-between align-items-center w-100">
         <span className="fs-4">Welcome to Expense Tracker !!!</span>
-        <Button
-          variant="warning rounded-pill px-4 py-1"
-          onClick={updatetoggler}
-        >
-          Your profile is incomplete.{" "}
-          <strong className="text-primary">Complete now</strong>
-        </Button>
+        <span>
+          <Button
+            variant="warning rounded-pill px-4 py-1"
+            onClick={updatetoggler}
+          >
+            Your profile is incomplete.{" "}
+            <strong className="text-primary">Complete now</strong>
+          </Button>
+          {token && <Button variant="outline-danger ms-3" onClick={logouthandler}>Log Out</Button>}          
+        </span>
       </div>
       {updateform && (
         <Row md={2} className="w-100">
