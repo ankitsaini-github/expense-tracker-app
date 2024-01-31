@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Form, FloatingLabel, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
 const Auth = () => {
   const [login,setlogin]=useState(false)
@@ -7,6 +8,8 @@ const Auth = () => {
   const useremail=useRef(null)
   const password=useRef(null)
   const confirmpassword=useRef(null)
+  const history=useHistory()
+
   const logintoggler=()=>{
     setlogin(prev=>!prev)
   }
@@ -45,6 +48,7 @@ const Auth = () => {
         if(data){
           console.log('login success ',data)
           window.alert('login success ')
+          history.replace('/home')
         }
       }
       else{
