@@ -14,8 +14,9 @@ const Auth = () => {
     e.preventDefault();
     const enteredemail=useremail.current.value;
     const enteredpassword=password.current.value;
-    const confirmation=confirmpassword.current.value;
-    if(enteredpassword!==confirmation){
+    const confirmation=login?null:confirmpassword.current.value;
+
+    if(!login && enteredpassword!==confirmation){
       window.alert('Password do not match !!!')
       return;
     }
@@ -70,9 +71,9 @@ const Auth = () => {
         <FloatingLabel controlId="userpassword" label="Password" className='my-3'>
           <Form.Control type="password" placeholder="Password" autoComplete='' required ref={password}/>
         </FloatingLabel>
-        <FloatingLabel controlId="userconfirmpassword" label="Confirm Password" className='my-3'>
+        {!login && <FloatingLabel controlId="userconfirmpassword" label="Confirm Password" className='my-3'>
           <Form.Control type="password" placeholder="Password" autoComplete='' required ref={confirmpassword}/>
-        </FloatingLabel>
+        </FloatingLabel>}
         <Button variant='primary rounded-pill px-5 my-4' type='submit' size='lg'>{login?<>Log In</>:<>Sign Up</>}</Button>
       </Form>
       <Button variant='outline-success mt-4 text-success' style={{backgroundColor:'rgb(209, 231, 221)'}} onClick={logintoggler}>{login?<>Create new account? SignUp</>:<>Have an account? LogIn</>}</Button>
