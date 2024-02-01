@@ -47,6 +47,7 @@ const Auth = () => {
         const data=await res.json();
         if(data){
           localStorage.setItem('usertoken',data.idToken)
+          localStorage.setItem('userid',data.localId)
           console.log('login success ',data)
           window.alert('login success ')
           history.replace('/profile')

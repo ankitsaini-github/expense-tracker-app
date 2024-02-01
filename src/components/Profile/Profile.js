@@ -123,6 +123,7 @@ const Profile = () => {
     if(window.confirm('Want to Log Out ?'))
     {
       window.localStorage.removeItem('usertoken')
+      window.localStorage.removeItem('userid')
       history.replace('/auth')
     }
   }

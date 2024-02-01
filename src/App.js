@@ -11,7 +11,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path='/' exact>
-            <Redirect to='/auth'/>
+            {token?<Redirect to='/profile'/>:<Redirect to='/auth'/>}
           </Route>
           <Route path='/auth' exact>
             <Auth/>

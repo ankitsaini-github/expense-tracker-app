@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Container, Form, Row,Col } from 'react-bootstrap'
 
 
@@ -45,29 +45,78 @@ const ExpenseList=(props)=>{
 return(
   <div className='px-5 py-4 border shadow-sm mt-4 fs-5 d-flex flex-column bg-white'>
     <span className='fs-4 border-bottom pb-3'>My Expenses</span>
-    <div>
-      <Row md={3} className='p-2 text-white fw-bold text-start' style={{backgroundColor:'rgb(32, 201, 151)'}} >
+    {props.expenses.length===0?<p className='mt-2 text-secondary'>No Expense Listed</p>:<div>
+      <Row md={3} className='p-2 text-white fw-bold text-start' style={{backgroundColor:'rgb(32, 201, 151)'}} key={'list-header'}>
         <Col>Catagory</Col>
         <Col>Description</Col>
         <Col>Price</Col>
       </Row>
       {
         props.expenses.map((item)=>(
-          <Row md={3} key={item.eid} className='py-2 border-bottom text-start'>
+          <Row md={3} key={item.id} className='py-2 border-bottom text-start'>
             <Col>{item.category}</Col>
             <Col>{item.description}</Col>
             <Col>{item.price}</Col>
           </Row>
         ))
       }
-    </div>
+    </div>}
   </div>
 )
 }
 const Expense = () => {
   const [expenses,setexpenses]=useState([]);
-  const addExpenseHandler=(newexpense)=>{
-    setexpenses(prev=>[newexpense,...prev])
+  const userid=window.localStorage.getItem('userid');
+
+  const url=`https://react-prep-2265-default-rtdb.asia-southeast1.firebasedatabase.app/userinfo/${userid}/expenses.json`
+
+  useEffect(()=>{
+    const getuserexpenses=async()=>{
+      try{
+        const response=await fetch(url)
+      if(response.ok){
+        const data=await response.json()
+        if(data){
+          console.log('got expense data : ',data)
+          const loadedexpense=[]
+          for (const key in data){
+            loadedexpense.push({
+              id:key,
+              price:data[key].price,
+              description:data[key].description,
+              category:data[key].category
+            })
+          }
+          setexpenses(loadedexpense)
+        }
+      }
+      }catch(err){
+        console.log(err)
+      }
+    }
+    getuserexpenses();
+  },[url])
+
+  const addExpenseHandler=async(newexpense)=>{
+    try{
+      const response=await fetch(url,{
+        method:'POST',
+        body: JSON.stringify(newexpense),
+        headers:{
+          'Content-Type' : 'application/json'
+        }
+      })
+      if(!response.ok){
+        console.log('got error ....')
+        throw new Error('Something went wrong!');
+      }
+      const data = await response.json();
+      console.log('added : ',data);
+      setexpenses(prev=>[...prev,newexpense])
+    }catch(err){
+      console.log(err)
+    }
+    // setexpenses(prev=>[newexpense,...prev])
   }
   return (
     <Container>
