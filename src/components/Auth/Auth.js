@@ -66,6 +66,11 @@ const Auth = () => {
       window.alert(error.message)
     }
   }
+
+  const resetpasswordhandler=() => { 
+    history.push('/auth/forgot-password')
+   }
+
   return (
     <div className='bg-light d-flex justify-content-center align-items-center w-100 h-100 flex-column'>
       <Form className='border w-25 w-sm-75 p-4 bg-white' onSubmit={submitHandler}>
@@ -79,6 +84,7 @@ const Auth = () => {
         {!login && <FloatingLabel controlId="userconfirmpassword" label="Confirm Password" className='my-3'>
           <Form.Control type="password" placeholder="Password" autoComplete='' required ref={confirmpassword}/>
         </FloatingLabel>}
+        {login && <p className='text-secondary ' style={{cursor:'pointer'}} onClick={resetpasswordhandler}>Forgot password ?</p>}
         <Button variant='primary rounded-pill px-5 my-4' type='submit' size='lg'>{login?<>Log In</>:<>Sign Up</>}</Button>
       </Form>
       <Button variant='outline-success mt-4 text-success' style={{backgroundColor:'rgb(209, 231, 221)'}} onClick={logintoggler}>{login?<>Create new account? SignUp</>:<>Have an account? LogIn</>}</Button>
