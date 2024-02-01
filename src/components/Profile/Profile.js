@@ -130,13 +130,13 @@ const Profile = () => {
 
   return (
     <div className="w-100 d-flex flex-column align-items-center bg-light" >
-      <div className="border p-3 d-flex justify-content-between align-items-center w-100 bg-white">
-        <span className="fs-4">Welcome to Expense Tracker !!!</span>
-        <span>
-          <Link to='/profile/expense' className='mx-2'>Expense</Link>
-          <Link to='/profile' className='mx-2'>Profile</Link>
+      <div className="border p-3 d-flex flex-column justify-content-between align-items-center w-100 bg-white flex-lg-row">
+        <span className="fs-4 mb-3 mb-lg-0">Welcome to Expense Tracker !!!</span>
+        <span className="fs-5 mb-3 mb-lg-0"> 
+          <Link to='/profile/expense' className='mx-2 p-1'>Expense</Link>
+          <Link to='/profile' className='mx-2 p-1'>Profile</Link>
         </span>
-        <span>
+        <span className="mb-3 mb-lg-0">
           <Button
             variant="warning rounded-pill px-4 py-1"
             onClick={openupdateprofile}
@@ -144,7 +144,7 @@ const Profile = () => {
             Your profile is incomplete.{" "}
             <strong className="text-primary">Complete now</strong>
           </Button>
-          {token && <Button variant="outline-danger ms-3" onClick={logouthandler}>Log Out</Button>}          
+          {token && <Button variant="outline-danger ms-3 mt-3 mt-lg-0" onClick={logouthandler}>Log Out</Button>}          
         </span>
       </div>
 
