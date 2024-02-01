@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Form, Row, Col, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { Link, Route } from "react-router-dom/cjs/react-router-dom.min";
+import Expense from "../Expense/Expense";
 
 const Profile = () => {
   const [updateform, setupdateform] = useState(false);
@@ -14,8 +16,12 @@ const Profile = () => {
 
   const newname = useRef(null);
   const newprofileurl = useRef(null);
-  const updatetoggler = () => {
-    setupdateform((prev) => !prev);
+  const openupdateprofile = () => {
+    setupdateform(true);
+    history.push('/profile')
+  };
+  const closeupdateprofile = () => {
+    setupdateform(false);
   };
 
   const url =
@@ -122,13 +128,17 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-100 d-flex flex-column align-items-center">
-      <div className="border p-3 d-flex justify-content-between align-items-center w-100">
+    <div className="w-100 d-flex flex-column align-items-center bg-light" >
+      <div className="border p-3 d-flex justify-content-between align-items-center w-100 bg-white">
         <span className="fs-4">Welcome to Expense Tracker !!!</span>
+        <span>
+          <Link to='/profile/expense' className='mx-2'>Expense</Link>
+          <Link to='/profile' className='mx-2'>Profile</Link>
+        </span>
         <span>
           <Button
             variant="warning rounded-pill px-4 py-1"
-            onClick={updatetoggler}
+            onClick={openupdateprofile}
           >
             Your profile is incomplete.{" "}
             <strong className="text-primary">Complete now</strong>
@@ -136,6 +146,7 @@ const Profile = () => {
           {token && <Button variant="outline-danger ms-3" onClick={logouthandler}>Log Out</Button>}          
         </span>
       </div>
+
       {updateform && (
         <Row md={2} className="w-100">
           <Col md={4} className="d-flex flex-column align-items-center my-5">
@@ -156,7 +167,7 @@ const Profile = () => {
               <div className="d-flex justify-content-between mb-4">
                 <span className="fw-bold fs-4">Contact Details</span>
                 <span>
-                  <Button variant="outline-danger fw-bold">Cancel</Button>
+                  <Button variant="outline-danger fw-bold" onClick={closeupdateprofile}>Cancel</Button>
                 </span>
               </div>
               <Row className="my-3">
@@ -219,6 +230,10 @@ const Profile = () => {
           </Col>
         </Row>
       )}
+
+      {token && <Route path='/profile/expense'>
+        <Expense/>
+      </Route>}
     </div>
   );
 };
