@@ -1,17 +1,21 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import './App.css';
+
 import Auth from './components/Auth/Auth';
 import Profile from './components/Profile/Profile';
 import Forgotpassword from './components/Auth/Forgotpassword';
 
 function App() {
-  const token=window.localStorage.getItem('usertoken')
+  const isAuth=useSelector(state=>state.auth.isAuthenticated)
+  // const token=window.localStorage.getItem('usertoken')
   return (
     <BrowserRouter>
       <div className="App">
         <Switch>
           <Route path='/' exact>
-            {token?<Redirect to='/profile'/>:<Redirect to='/auth'/>}
+            {isAuth?<Redirect to='/profile'/>:<Redirect to='/auth'/>}
           </Route>
           <Route path='/auth' exact>
             <Auth/>
@@ -20,7 +24,7 @@ function App() {
               <Forgotpassword/>
             </Route>
           <Route path='/profile'>
-            {token ? <Profile/> : <Redirect to="/auth"/>}
+            {isAuth ? <Profile/> : <Redirect to="/auth"/>}
           </Route>
           <Route path='*' exact>
             <p>404 ERROR : PAGE NOT FOUND</p>

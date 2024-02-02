@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Row, Col, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { Link, Route } from "react-router-dom/cjs/react-router-dom.min";
+
+import { authActions } from "../../store/authReducer/authSlice";
 import Expense from "../Expense/Expense";
 
 const Profile = () => {
+  const dispatch=useDispatch()
+  const {usertoken}=useSelector(state=>state.auth)
   const [updateform, setupdateform] = useState(false);
   const history=useHistory()
   const [userdata, setuserdata] = useState({
@@ -26,7 +31,8 @@ const Profile = () => {
 
   const url =
     "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCNjyGdvZOwov0B76Oqc9_7DGWkVBnUODY";
-  const token = localStorage.getItem("usertoken");
+
+  // const token = localStorage.getItem("usertoken");
 
   useEffect(() => {
     const getuserdata = async () => {
@@ -34,7 +40,7 @@ const Profile = () => {
         const res = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            idToken: token,
+            idToken: usertoken,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -64,7 +70,7 @@ const Profile = () => {
       }
     };
     getuserdata();
-  }, [token]);
+  }, [usertoken]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -73,7 +79,7 @@ const Profile = () => {
     fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        idToken: token,
+        idToken: usertoken,
         displayName: enteredNewname,
         photoUrl: photourl,
         returnSecureToken: false,
@@ -96,7 +102,7 @@ const Profile = () => {
         method: "POST",
         body: JSON.stringify({
           requestType: "VERIFY_EMAIL",
-          idToken: token,
+          idToken: usertoken,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -122,8 +128,9 @@ const Profile = () => {
   const logouthandler=()=>{
     if(window.confirm('Want to Log Out ?'))
     {
-      window.localStorage.removeItem('usertoken')
-      window.localStorage.removeItem('userid')
+      dispatch(authActions.logout())
+      // window.localStorage.removeItem('usertoken')
+      // window.localStorage.removeItem('userid')
       history.replace('/auth')
     }
   }
@@ -144,7 +151,7 @@ const Profile = () => {
             Your profile is incomplete.{" "}
             <strong className="text-primary">Complete now</strong>
           </Button>
-          {token && <Button variant="outline-danger ms-3 mt-3 mt-lg-0" onClick={logouthandler}>Log Out</Button>}          
+          {usertoken && <Button variant="outline-danger ms-3 mt-3 mt-lg-0" onClick={logouthandler}>Log Out</Button>}          
         </span>
       </div>
 
@@ -232,7 +239,7 @@ const Profile = () => {
         </Row>
       )}
 
-      {token && <Route path='/profile/expense'>
+      {usertoken && <Route path='/profile/expense'>
         <Expense/>
       </Route>}
     </div>

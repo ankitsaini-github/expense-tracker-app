@@ -1,8 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { Form, FloatingLabel, Button } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
+import { authActions } from '../../store/authReducer/authSlice'
+
 const Auth = () => {
+  const dispatch=useDispatch()
   const [login,setlogin]=useState(false)
   // const [isloading,setisloading]=useState(false)
   const useremail=useRef(null)
@@ -46,8 +50,12 @@ const Auth = () => {
       if(res.ok){
         const data=await res.json();
         if(data){
-          localStorage.setItem('usertoken',data.idToken)
-          localStorage.setItem('userid',data.localId)
+          dispatch(authActions.login({
+            usertoken:data.idToken,
+            userid:data.localId
+          }))
+          // localStorage.setItem('usertoken',data.idToken)
+          // localStorage.setItem('userid',data.localId)
           console.log('login success ',data)
           window.alert('login success ')
           history.replace('/profile')

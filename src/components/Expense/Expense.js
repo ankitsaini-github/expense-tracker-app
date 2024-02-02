@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Container, Form, Row,Col } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { expenseActions } from '../../store/expenseReducer/expenseSlice';
 
 const ExpenseForm=(props)=>{
   const eprice=useRef()
@@ -102,8 +104,11 @@ return(
 
 
 const Expense = () => {
-  const [expenses,setexpenses]=useState([]);
-  const userid=window.localStorage.getItem('userid');
+  const {userid}=useSelector(state=>state.auth)
+  const {expenses}=useSelector(state=>state.expenses)
+  const dispatch=useDispatch()
+  // const [expenses,setexpenses]=useState([]);
+  // const userid=window.localStorage.getItem('userid');
   const [expenseEditor,setExpenseEditor]=useState(false);
   const [editexpense,seteditexpense]=useState({})
 
@@ -126,7 +131,8 @@ const Expense = () => {
               category:data[key].category
             })
           }
-          setexpenses(loadedexpense)
+          // setexpenses(loadedexpense)
+          dispatch(expenseActions.setExpense(loadedexpense))
         }
       }
       }catch(err){
@@ -134,7 +140,7 @@ const Expense = () => {
       }
     }
     getuserexpenses();
-  },[url])
+  },[url,dispatch])
 
   const addExpenseHandler=async(newexpense)=>{
     try{
@@ -151,7 +157,9 @@ const Expense = () => {
       }
       const data = await response.json();
       console.log('added : ',data);
-      setexpenses(prev=>[...prev,newexpense])
+
+      dispatch(expenseActions.addExpense(newexpense))
+      // setexpenses(prev=>[...prev,newexpense])
     }catch(err){
       console.log(err)
     }
@@ -174,10 +182,15 @@ const Expense = () => {
       }
       const data = await response.json();
       console.log('updated : ',data);
-      const index=expenses.findIndex((i)=>i.id===expenseid)
-      const newarr=[...expenses]
-      newarr[index]={...updatedexpense,id:expenseid}
-      setexpenses(newarr)
+      // const index=expenses.findIndex((i)=>i.id===expenseid)
+      // const newarr=[...expenses]
+      // newarr[index]={...updatedexpense,id:expenseid}
+
+      dispatch(expenseActions.updateExpense({
+        id:expenseid,
+        updatedexpense:updatedexpense
+      }))
+      // setexpenses(newarr)
       setExpenseEditor(false)
     }catch(err){
       console.log(err)
@@ -198,8 +211,10 @@ const Expense = () => {
         console.log('got error ....')
         throw new Error('Something went wrong!');
       }
-      const newarr=expenses.filter((i)=>i.id!==expenseid)
-      setexpenses(newarr)
+
+      dispatch(expenseActions.deleteExpense(expenseid))
+      // const newarr=expenses.filter((i)=>i.id!==expenseid)
+      // setexpenses(newarr)
       console.log('Deleted expense')
     }catch(err){
       console.log(err)
