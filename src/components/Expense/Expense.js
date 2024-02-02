@@ -85,7 +85,7 @@ return(
       </Row>
       {
         props.expenses.map((item)=>(
-          <Row md={4} key={item.id} className='py-2 border-bottom text-start'>
+          <Row md={4} key={'e_'+item.id} className='py-2 border-bottom text-start'>
             <Col md={4}>{item.category}</Col>
             <Col md={4}>{item.description}</Col>
             <Col md={2}>{item.price}</Col>
@@ -228,7 +228,7 @@ const Expense = () => {
     console.log('edit expense :',editexpense)
   }
   return (
-    <Container>
+    <Container className=''>
       <ExpenseForm onAddExpense={addExpenseHandler} onEditExpense={editExpenseHandler} showEditor={expenseEditor} item={editexpense} onCancel={()=>{setExpenseEditor(false)}}/>
       <ExpenseList expenses={expenses} onEditClick={editformhandler} onDelete={deleteExpenseHandler}/>
     </Container>

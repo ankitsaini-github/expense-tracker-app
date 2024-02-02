@@ -5,14 +5,17 @@ import { useHistory } from "react-router-dom";
 import { Link, Route } from "react-router-dom/cjs/react-router-dom.min";
 
 import { authActions } from "../../store/authReducer/authSlice";
+import { themeActions } from "../../store/themeReducer/themeSlice";
+
 import Expense from "../Expense/Expense";
 
 const Profile = () => {
-  const dispatch=useDispatch()
-  const {usertoken}=useSelector(state=>state.auth)
-  const {showpro}=useSelector(state=>state.expenses)
+  const dispatch = useDispatch();
+  const { usertoken } = useSelector((state) => state.auth);
+  const { showpro } = useSelector((state) => state.expenses);
+  const {isPro,darktheme}=useSelector(state=>state.theme)
   const [updateform, setupdateform] = useState(false);
-  const history=useHistory()
+  const history = useHistory();
   const [userdata, setuserdata] = useState({
     displayname: "",
     email: "",
@@ -20,11 +23,13 @@ const Profile = () => {
     emailverified: false,
   });
 
+  const darkclass=darktheme?'darkmode':'';
+
   const newname = useRef(null);
   const newprofileurl = useRef(null);
   const openupdateprofile = () => {
     setupdateform(true);
-    history.push('/profile')
+    history.push("/profile");
   };
   const closeupdateprofile = () => {
     setupdateform(false);
@@ -126,34 +131,65 @@ const Profile = () => {
     }
   };
 
-  const logouthandler=()=>{
-    if(window.confirm('Want to Log Out ?'))
-    {
-      dispatch(authActions.logout())
+  const logouthandler = () => {
+    if (window.confirm("Want to Log Out ?")) {
+      dispatch(authActions.logout());
       // window.localStorage.removeItem('usertoken')
       // window.localStorage.removeItem('userid')
-      history.replace('/auth')
+      history.replace("/auth");
     }
+  };
+
+  const prounclockhandler=()=>{
+    dispatch(themeActions.setpro())
+  }
+  const themeToggler=()=>{
+    dispatch(themeActions.toggletheme())
   }
 
   return (
-    <div className="w-100 d-flex flex-column align-items-center bg-light" >
+    <div className={"w-100 d-flex flex-column align-items-center bg-light "+darkclass}>
       <div className="border p-3 d-flex flex-column justify-content-between align-items-center w-100 bg-white flex-lg-row">
-        <span className="fs-4 mb-3 mb-lg-0">Welcome to Expense Tracker !!!</span>
-        <span className="fs-5 mb-3 mb-lg-0"> 
-          <Link to='/profile/expense' className='mx-2 p-1'>Expense</Link>
-          <Link to='/profile' className='mx-2 p-1'>Profile</Link>
+        <span className="fs-4 mb-3 mb-lg-0">
+          Welcome to Expense Tracker !!!
+        </span>
+        <span className="fs-5 mb-3 mb-lg-0">
+          <Link to="/profile/expense" className="mx-2 p-1">
+            Expense
+          </Link>
+          <Link to="/profile" className="mx-2 p-1">
+            Profile
+          </Link>
         </span>
         <span className="mb-3 mb-lg-0">
+          {isPro && <Button variant="outline-dark me-3 fs-5" size="sm" onClick={themeToggler}>◑</Button>}
           <Button
-            variant="warning rounded-pill px-4 py-1"
+            variant="warning rounded-pill px-4 py-1 "
             onClick={openupdateprofile}
           >
             Your profile is incomplete.{" "}
             <strong className="text-primary">Complete now</strong>
           </Button>
-          {showpro && <Button variant="primary text-white fw-bold border-0 ms-3 mt-3 mt-lg-0" style={{backgroundImage:'linear-gradient(to right, #00dbde 0%, #fc00ff 100%)'}}>Buy Pro</Button>}
-          {usertoken && <Button variant="outline-danger ms-3 mt-3 mt-lg-0" onClick={logouthandler}>Log Out</Button>}          
+          {showpro && (
+            <Button
+              variant="primary text-white fw-bold border-0 ms-3 mt-3 mt-lg-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, #00dbde 0%, #fc00ff 100%)",
+              }}
+              onClick={prounclockhandler}
+            >
+              Activate Pro
+            </Button>
+          )}
+          {usertoken && (
+            <Button
+              variant="outline-danger ms-3 mt-3 mt-lg-0"
+              onClick={logouthandler}
+            >
+              Log Out
+            </Button>
+          )}
         </span>
       </div>
 
@@ -177,7 +213,12 @@ const Profile = () => {
               <div className="d-flex justify-content-between mb-4">
                 <span className="fw-bold fs-4">Contact Details</span>
                 <span>
-                  <Button variant="outline-danger fw-bold" onClick={closeupdateprofile}>Cancel</Button>
+                  <Button
+                    variant="outline-danger fw-bold"
+                    onClick={closeupdateprofile}
+                  >
+                    Cancel
+                  </Button>
                 </span>
               </div>
               <Row className="my-3">
@@ -241,9 +282,11 @@ const Profile = () => {
         </Row>
       )}
 
-      {usertoken && <Route path='/profile/expense'>
-        <Expense/>
-      </Route>}
+      {usertoken && (
+        <Route path="/profile/expense">
+          <Expense />
+        </Route>
+      )}
     </div>
   );
 };

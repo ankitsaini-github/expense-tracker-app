@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.darkmode{
+  filter: invert(1);
+  /* filter: invert(1) hue-rotate(180deg); */
+}
