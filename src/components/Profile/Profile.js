@@ -10,6 +10,7 @@ import Expense from "../Expense/Expense";
 const Profile = () => {
   const dispatch=useDispatch()
   const {usertoken}=useSelector(state=>state.auth)
+  const {showpro}=useSelector(state=>state.expenses)
   const [updateform, setupdateform] = useState(false);
   const history=useHistory()
   const [userdata, setuserdata] = useState({
@@ -151,6 +152,7 @@ const Profile = () => {
             Your profile is incomplete.{" "}
             <strong className="text-primary">Complete now</strong>
           </Button>
+          {showpro && <Button variant="primary text-white fw-bold border-0 ms-3 mt-3 mt-lg-0" style={{backgroundImage:'linear-gradient(to right, #00dbde 0%, #fc00ff 100%)'}}>Buy Pro</Button>}
           {usertoken && <Button variant="outline-danger ms-3 mt-3 mt-lg-0" onClick={logouthandler}>Log Out</Button>}          
         </span>
       </div>

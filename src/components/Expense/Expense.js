@@ -65,6 +65,7 @@ return(
 )
 }
 const ExpenseList=(props)=>{
+  const {totalamount}=useSelector(state=>state.expenses)
   const editclicked=(item)=>{
     props.onEditClick(item)
   }
@@ -74,7 +75,7 @@ const ExpenseList=(props)=>{
   }
 return(
   <div className='px-5 py-4 border shadow-sm my-4 fs-5 d-flex flex-column bg-white'>
-    <span className='fs-4 border-bottom pb-3'>My Expenses</span>
+    <span className='fs-4 border-bottom pb-3 d-flex flex-column flex-lg-row justify-content-between'><h2>My Expenses</h2> <p>Total : Rs {totalamount}</p></span>
     {props.expenses.length===0?<p className='mt-2 text-secondary'>No Expense Listed</p>:<div>
       <Row md={4} className='p-2 text-white fw-bold text-start' style={{backgroundColor:'rgb(32, 201, 151)'}} key={'list-header'}>
         <Col md={4}>Catagory</Col>
