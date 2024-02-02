@@ -3,6 +3,7 @@ import { Button, Container, Form, Row,Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { expenseActions } from '../../store/expenseReducer/expenseSlice';
+import { CSVLink } from 'react-csv';
 
 const ExpenseForm=(props)=>{
   const eprice=useRef()
@@ -66,6 +67,16 @@ return(
 }
 const ExpenseList=(props)=>{
   const {totalamount}=useSelector(state=>state.expenses)
+  const {isPro}=useSelector(state=>state.theme)
+  const csvdata=[]
+  props.expenses.forEach((i)=>{
+    csvdata.push({
+      CATEGORY:i.category,
+      DESCRIPTION:i.description,
+      PRICE:i.price,
+    })
+  })
+
   const editclicked=(item)=>{
     props.onEditClick(item)
   }
@@ -99,6 +110,7 @@ return(
         ))
       }
     </div>}
+    {isPro && <CSVLink data={csvdata} className='bg-light p-3 border my-3 ' filename='my-expenses.csv'>Download CSV</CSVLink>}
   </div>
 )
 }
