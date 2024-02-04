@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { expenseActions } from '../../store/expenseReducer/expenseSlice';
 import { CSVLink } from 'react-csv';
 
-const ExpenseForm=(props)=>{
+export const ExpenseForm=(props)=>{
   const eprice=useRef()
   const edesc=useRef()
   const ecat=useRef()
@@ -65,7 +65,7 @@ return(
   </Form>
 )
 }
-const ExpenseList=(props)=>{
+export const ExpenseList=(props)=>{
   const {totalamount}=useSelector(state=>state.expenses)
   const {isPro}=useSelector(state=>state.theme)
   const csvdata=[]
